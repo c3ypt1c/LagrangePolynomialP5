@@ -59,6 +59,8 @@ function draw() {
 	if(points.length < 2) {
 		recalculateLangrange = false;
 		LagrangeObject = null;
+	} else if (LagrangeObject == null) {
+		recalculateLangrange = true;
 	}
 
 	if(recalculateLangrange) {
@@ -68,9 +70,12 @@ function draw() {
 	//draw langrange
 	if(LagrangeObject != null) {
 		push();
+		beginShape(LINES);
 		for(let i = 0; i < windowWidth; i++) {
-			point(i, LagrangeObject.F(i));
+			vertex(i-1, LagrangeObject.F(i-1))
+			vertex(i, LagrangeObject.F(i));
 		}
+		endShape();
 		pop();
 	}
 }
@@ -79,11 +84,13 @@ function mouseClicked() {
 	// create point
 	if(mouseDownOnPoint === false && points.length < maxPoints) {
 		points.push(new Point(mouseX, mouseY));
+		LagrangeObject = null;
 	}
 
 	// remove point if there is no movement
 	if(!mouseDraggedLastFrame && mouseDownOnPoint !== false) {
 		points.splice(mouseDownOnPoint, 1);
+		LagrangeObject = null;
 	}
 }
 
