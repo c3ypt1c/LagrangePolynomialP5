@@ -14,11 +14,15 @@ var circleSize = 20;
 let mouseDownOnPoint = false; //index or false
 let mouseDraggedLastFrame = false; 
 
+let LagrangeObject = null; 
+
+
 function setup() {
 	createCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
+	let recalculateLangrange = false;
 	background(220);
 	fill(0);
 
@@ -45,9 +49,29 @@ function draw() {
 		//update point that was dragged
 		if(mouseDownOnPoint === point) {
 			points[point].moveTo(mouseX, mouseY);
+			recalculateLangrange = true;
 		}
 
 		points[point].render();
+	}
+
+	//decide if langrange needs to be updated
+	if(points.length < 2) {
+		recalculateLangrange = false;
+		LagrangeObject = null;
+	}
+
+	if(recalculateLangrange) {
+		LagrangeObject = new Lagrange(points);
+	}
+
+	//draw langrange
+	if(LagrangeObject != null) {
+		push();
+		for(let i = 0; i < windowWidth; i++) {
+			point(i, LagrangeObject.F(i));
+		}
+		pop();
 	}
 }
 
