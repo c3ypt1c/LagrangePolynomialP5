@@ -48,7 +48,6 @@ class Lagrange {
 	}
 
 	F(x) {
-		debugger;
 		let sum = 0;
 		for (let i = 0; i < this.lagrangeChunks.length; i++) {
 			sum += this.lagrangeChunks[i].F(x);
